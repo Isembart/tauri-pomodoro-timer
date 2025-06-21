@@ -7,9 +7,12 @@ struct TimerWrapper(Mutex<timer::Timer>);
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_notification::init())
         .setup(|app| {
             let app_handle = app.handle();
-            app.manage(TimerWrapper(Mutex::new(timer::Timer::new(app_handle.clone()))));
+            app.manage(TimerWrapper(Mutex::new(timer::Timer::new(
+                app_handle.clone(),
+            ))));
             Ok(())
         })
         .plugin(tauri_plugin_opener::init())
@@ -17,12 +20,10 @@ pub fn run() {
             resume_timer,
             pause_timer,
             setup_timer,
-            
-            ])
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
-
 
 mod timer;
 
@@ -41,14 +42,8 @@ fn pause_timer(timer_state: State<TimerWrapper>, app: AppHandle) {
 }
 
 #[tauri::command]
-fn setup_timer(timer_state: State<TimerWrapper>, total_secs: u64, app: AppHandle){
+fn setup_timer(timer_state: State<TimerWrapper>, total_secs: u64, app: AppHandle) {
     println!("Called setup timer");
     let mut timer = timer_state.0.lock().unwrap();
-    timer.setup(Duration::from_secs(total_secs),app);
-
-}
- 
-#[tauri::command]
-fn skip_timer_phase() {
-    todo!();
+    timer.setup(Duration::from_secs(total_secs), app);
 }

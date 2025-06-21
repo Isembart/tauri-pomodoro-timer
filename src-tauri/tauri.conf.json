@@ -15,7 +15,7 @@
       {
         "title": "tauri-pomodoro-timer",
         "width": 800,
-        "height": 600
+        "height": 300
       }
     ],
     "security": {
