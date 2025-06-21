@@ -14,19 +14,18 @@ async function setupTimer(totalSecs: number) {
 
 export default function App() {
 
-    const [timerRunning, setTimeRunning] = useState(false);
+    const [isPaused, setIsPaused] = useState(true);
     const [timerValue, setTimerValue] = useState(0);
 
     useEffect(() => {
         const setup = async () => {
             listen<number>("timer-update", (event) => {
-                console.log("Timer updated:", event.payload);
                 setTimerValue(event.payload);
             })
 
-            listen("timer-state-change", (event) => {
-                console.log("Time state changed:", event.payload);
-                setTimeRunning(event.payload === "Running");
+            listen<boolean>("timer-state-change", (event) => {
+                console.log("Timer state changed:", event.payload);
+                setIsPaused(event.payload);
             })
         };
         setup().catch(error => {
@@ -46,18 +45,18 @@ export default function App() {
                 <button onClick={()=>setupTimer(900)}>Long Break</button>
             </div>
 
-            {timerRunning ? (
+            {isPaused ? (
                 <button onClick={() => {
-                    invoke('pause_timer').then(() => setTimeRunning(false)).catch(error => {
-                        console.error("Error pausing timer:", error);
-                    });
-                }}>Stop</button>
-            ) : (
-                <button onClick={() => {
-                    invoke('resume_timer').then(() => setTimeRunning(true)).catch(error => {
+                    invoke('resume_timer').then(() => setIsPaused(false)).catch(error => {
                         console.error("Error resuming timer:", error);
                     });
                 }}>Start</button>
+            ) : (
+                <button onClick={() => {
+                    invoke('pause_timer').then(() => setIsPaused(true)).catch(error => {
+                        console.error("Error pausing timer:", error);
+                    });
+                }}>Stop</button>
             )}
             
             {/* <h1></h1> */}
