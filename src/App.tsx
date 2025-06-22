@@ -7,7 +7,7 @@ import Timer from "./Timer";
 type TimerMode = "focus" | "short" | "long" | null;
 
 
-let cyclesList = ["focus", "short", "focus", "short", "focus", "long"];
+// let cyclesList = ["focus", "short", "focus", "short", "focus", "long"];
 
 async function setupTimer(totalSecs: number) {
     try {
@@ -76,7 +76,7 @@ export default function App() {
         <div className={`app-container ${mode}`}>
       <div className="row">
         <button onClick={() => handleSetup(1500, "focus")}>Focus</button>
-        <button onClick={() => handleSetup(5, "short")}>Break</button>
+        <button onClick={() => handleSetup(300, "short")}>Break</button>
         <button onClick={() => handleSetup(900, "long")}>Long Break</button>
       </div>
 
