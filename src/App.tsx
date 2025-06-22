@@ -6,6 +6,9 @@ import Timer from "./Timer";
 
 type TimerMode = "focus" | "short" | "long" | null;
 
+
+let cyclesList = ["focus", "short", "focus", "short", "focus", "long"];
+
 async function setupTimer(totalSecs: number) {
     try {
         await invoke('setup_timer', { totalSecs });
@@ -28,10 +31,20 @@ export default function App() {
     };
 
     useEffect(() => {
+
+      const setup2 = async () => {
         if (!hasInitialized.current) {
             handleSetup(1500, "focus");
             hasInitialized.current = true;
+            let remaining_time = await invoke<number>("get_remaining");
+            setTimerValue(remaining_time);
         }
+      }
+
+      setup2().catch(error => {
+          console.error("Error during initial setup:", error);  
+      });
+        
 
         return () => {
         };
@@ -47,6 +60,8 @@ export default function App() {
                 console.log("Timer state changed:", event.payload);
                 setIsPaused(event.payload);
             })
+            
+            
         };
         setup().catch(error => {
             console.error("Error setting up event listener:", error);
@@ -61,7 +76,7 @@ export default function App() {
         <div className={`app-container ${mode}`}>
       <div className="row">
         <button onClick={() => handleSetup(1500, "focus")}>Focus</button>
-        <button onClick={() => handleSetup(300, "short")}>Break</button>
+        <button onClick={() => handleSetup(5, "short")}>Break</button>
         <button onClick={() => handleSetup(900, "long")}>Long Break</button>
       </div>
 

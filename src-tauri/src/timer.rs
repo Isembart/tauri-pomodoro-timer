@@ -126,4 +126,10 @@ impl Timer {
 
         let _ = app.emit("timer-state-change", *paused);
     }
+
+    pub fn get_remaining(&self) -> Duration{
+        let elapsed = self.elapsed.lock().unwrap();
+        let total = self.total.lock().unwrap();
+        *total - *elapsed
+    }
 }
