@@ -66,7 +66,9 @@ impl Timer {
                         println!("Timer finished!");
 
 
-                        app.notification().builder().title("Session finished!").body("You finished your next session, keep it up!").show();
+                        app.notification().builder().title("Session finished!").body("You finished your next session, keep it up!")
+                            .sound("Default")
+                            .show();
                     }
                     *done = true;
                     thread_tick_complete_condvar.1.notify_all(); // notify setup() that if it changes something it wont be overwritten by running thread

@@ -18,6 +18,14 @@ async function setupTimer(totalSecs: number) {
 }
 
 
+function playTimerSound(number: number = 1) {
+    const audio = new Audio(`/src/assets/ClockTick${number}.mp3`);
+    audio.play().catch((error) => {
+        console.error("Error playing timer sound:", error);
+    });
+}
+
+
 export default function App() {
 
     const hasInitialized = useRef(false);
@@ -76,7 +84,7 @@ export default function App() {
         <div className={`app-container ${mode}`}>
       <div className="row">
         <button onClick={() => handleSetup(1500, "focus")}>Focus</button>
-        <button onClick={() => handleSetup(300, "short")}>Break</button>
+        <button onClick={() => handleSetup(3, "short")}>Break</button>
         <button onClick={() => handleSetup(900, "long")}>Long Break</button>
       </div>
 
@@ -85,7 +93,10 @@ export default function App() {
           <button
             onClick={() =>
               invoke("resume_timer")
-                .then(() => setIsPaused(false))
+                .then(() => {
+                  playTimerSound(2);
+                  setIsPaused(false)
+                })
                 .catch((error) =>
                   console.error("Error resuming timer:", error)
                 )
@@ -97,7 +108,10 @@ export default function App() {
           <button
             onClick={() =>
               invoke("pause_timer")
-                .then(() => setIsPaused(true))
+                .then(() => {
+                  playTimerSound(1);
+                  setIsPaused(true)
+                })
                 .catch((error) => console.error("Error pausing timer:", error))
             }
           >
