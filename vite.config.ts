@@ -29,4 +29,6 @@ export default defineConfig(async () => ({
     },
   },
   plugins:[react()],
+
+  publicDir: "src/public"
 }));
