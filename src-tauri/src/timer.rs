@@ -65,8 +65,10 @@ impl Timer {
                         let _ = app.emit("timer-state-change", *is_paused);
                         println!("Timer finished!");
 
-
-                        app.notification().builder().title("Session finished!").body("You finished your next session, keep it up!")
+                        app.notification()
+                            .builder()
+                            .title("Session finished!")
+                            .body("You finished your next session, keep it up!")
                             .sound("Default")
                             .show();
                     }
@@ -129,7 +131,7 @@ impl Timer {
         let _ = app.emit("timer-state-change", *paused);
     }
 
-    pub fn get_remaining(&self) -> Duration{
+    pub fn get_remaining(&self) -> Duration {
         let elapsed = self.elapsed.lock().unwrap();
         let total = self.total.lock().unwrap();
         *total - *elapsed

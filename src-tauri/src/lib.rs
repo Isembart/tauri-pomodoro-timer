@@ -1,23 +1,27 @@
 use std::{sync::Mutex, time::Duration};
 
-use tauri::{menu::{Menu, MenuItem}, tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent}, AppHandle, Manager, State};
+use tauri::{
+    menu::{Menu, MenuItem},
+    tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
+    AppHandle, Manager, State,
+};
 
 struct TimerWrapper(Mutex<timer::Timer>);
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_single_instance::init(|_app,_args,_cwd|{}))
         .plugin(tauri_plugin_notification::init())
         .setup(|app| {
             let app_handle = app.handle();
             let mut timer = timer::Timer::new(app_handle.clone());
             timer.setup(Duration::from_secs(1500), app_handle.clone());
-            app.manage(TimerWrapper(Mutex::new(timer)
-            ));
+            app.manage(TimerWrapper(Mutex::new(timer)));
 
             //TRAY
 
-            let quit_i = MenuItem::with_id(app,"quit","Quit", true, None::<&str>)?;
+            let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
             let menu = Menu::with_items(app, &[&quit_i])?;
 
             let tray = TrayIconBuilder::new()
@@ -32,15 +36,18 @@ pub fn run() {
                     }
                 })
                 .on_tray_icon_event(|tray, event| match event {
-                    TrayIconEvent::Click { button: MouseButton::Left, button_state: MouseButtonState::Up, ..} => {
+                    TrayIconEvent::Click {
+                        button: MouseButton::Left,
+                        button_state: MouseButtonState::Up,
+                        ..
+                    } => {
                         let app = tray.app_handle();
                         if let Some(window) = app.get_webview_window("main") {
                             let _ = window.show();
                             let _ = window.set_focus();
                         }
                     }
-                    _ => {
-                    }
+                    _ => {}
                 })
                 .build(app)?;
 
@@ -53,7 +60,7 @@ pub fn run() {
             get_remaining,
         ])
         .on_window_event(|window, event| match event {
-            tauri::WindowEvent::CloseRequested {api, ..} => {
+            tauri::WindowEvent::CloseRequested { api, .. } => {
                 window.hide().unwrap();
                 api.prevent_close();
             }
@@ -61,15 +68,15 @@ pub fn run() {
         })
         .run(tauri::generate_context!())
         .expect("error while building tauri application")
-        // .run(|app, event| match event {
-        //     tauri::RunEvent::ExitRequested { api, .. } => {
-        //         api.prevent_exit();
-        //         for (_label, window) in app.webview_windows() {
-        //             window.close().unwrap();
-        //         }
-        //     }
-        //     _ => (),
-        // });
+    // .run(|app, event| match event {
+    //     tauri::RunEvent::ExitRequested { api, .. } => {
+    //         api.prevent_exit();
+    //         for (_label, window) in app.webview_windows() {
+    //             window.close().unwrap();
+    //         }
+    //     }
+    //     _ => (),
+    // });
 }
 
 mod timer;
@@ -96,6 +103,6 @@ fn setup_timer(timer_state: State<TimerWrapper>, total_secs: u64, app: AppHandle
 }
 
 #[tauri::command]
-fn get_remaining(timer_state: State<TimerWrapper>) -> u64{
+fn get_remaining(timer_state: State<TimerWrapper>) -> u64 {
     timer_state.0.lock().unwrap().get_remaining().as_secs()
 }
