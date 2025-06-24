@@ -1,7 +1,14 @@
-# Tauri + Vanilla TS
+# tauri-pomodoro-timer
 
-This template should help get you started developing with Tauri in vanilla HTML, CSS and Typescript.
+Basic pomodoro timer written using Rust & Tauri just because there's not much free alternatives in windows store and I don't want to have my browser open all the time.
 
-## Recommended IDE Setup
+# Start dev
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+```
+pnpm tauri dev
+```
+
+# Build bundle
+```
+pnpm tauri build
+```
