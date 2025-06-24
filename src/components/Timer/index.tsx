@@ -1,3 +1,4 @@
+import "./TimerStyles.css"
 
 export default function Timer({ timerValue }: { timerValue: number }) {
     //convert seoncd to mm:ss format
@@ -10,7 +11,7 @@ export default function Timer({ timerValue }: { timerValue: number }) {
 
     return (
         <div>
-            <h1>{formatTime(timerValue)}</h1>
+            <h1 className="Timer">{formatTime(timerValue)}</h1>
         </div>
     )
 }

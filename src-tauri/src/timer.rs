@@ -1,12 +1,11 @@
 use std::{
-    process::exit,
     sync::{Arc, Condvar, Mutex},
-    thread::{self, sleep, JoinHandle},
-    time::{Duration, Instant},
+    thread::{self, JoinHandle},
+    time::{Duration},
 };
 
 use tauri::{AppHandle, Emitter};
-use tauri_plugin_notification::NotificationExt;
+use tauri_plugin_notification::{NotificationExt};
 
 pub struct Timer {
     elapsed: Arc<Mutex<Duration>>,
@@ -64,6 +63,7 @@ impl Timer {
                         let _ = app.emit("timer-finished", ());
                         let _ = app.emit("timer-state-change", *is_paused);
                         println!("Timer finished!");
+
 
                         let _ = app.notification()
                             .builder()

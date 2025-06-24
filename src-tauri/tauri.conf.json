@@ -14,8 +14,8 @@
     "windows": [
       {
         "title": "Pomodo",
-        "width": 800,
-        "height": 300,
+        "width": 440,
+        "height": 230,
         "decorations": false
       }
     ],

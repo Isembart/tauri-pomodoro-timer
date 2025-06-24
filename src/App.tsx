@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
-import Timer from "./Timer";
+import Timer from "./components/Timer";
 
 
 type TimerMode = "focus" | "short" | "long" | null;
@@ -81,60 +81,35 @@ export default function App() {
     },[]);
 
     return (
-        <div data-tauri-drag-region className={`app-container ${mode}`}>
-      <div className="row">
-        <button onClick={() => handleSetup(1500, "focus")}>Focus</button>
-        <button onClick={() => handleSetup(300, "short")}>Break</button>
-        <button onClick={() => handleSetup(900, "long")}>Long Break</button>
-      </div>
+      <div data-tauri-drag-region className={`app-container ${mode}`}>
+        <Timer timerValue={timerValue} />
+        <div className="row">
+          <button onClick={() => handleSetup(1500, "focus")}>Focus</button>
+          <button onClick={() => handleSetup(5, "short")}>Break</button>
+          <button onClick={() => handleSetup(900, "long")}>Long Break</button>
+        </div>
 
-      <div className="controls">
-        {isPaused ? (
-          <button
-            onClick={() =>
+
+        <button className={`MainButton isPaused-${isPaused}`} onClick={() => {
+          switch(isPaused) {
+            case true:
               invoke("resume_timer")
                 .then(() => {
-                  playTimerSound(2);
-                  setIsPaused(false)
+                  playTimerSound(1);
                 })
-                .catch((error) =>
-                  console.error("Error resuming timer:", error)
-                )
-            }
-          >
-            Start
-          </button>
-        ) : (
-          <button
-            onClick={() =>
+                break;
+            case false:
               invoke("pause_timer")
                 .then(() => {
                   playTimerSound(1);
-                  setIsPaused(true)
                 })
-                .catch((error) => console.error("Error pausing timer:", error))
-            }
-          >
-            Stop
-          </button>
-        )}
-
-        {/* <button
-          onClick={() =>
-            invoke("reset_timer")
-              .then(() => setIsPaused(true))
-              .catch((error) => console.error("Error resetting timer:", error))
+                break;
           }
-        >
-          <img
-            src="/src/assets/skipIcon.svg"
-            alt="Skip Timer"
-            style={{ width: "34px", height: "24px" }}
-          />
-        </button> */}
-      </div>
+          setIsPaused(!isPaused);
+        }}>
+        {isPaused ? "Start" : "Pause"}
+        </button>
 
-      <Timer timerValue={timerValue} />
-    </div>
+      </div>
     );
 }
