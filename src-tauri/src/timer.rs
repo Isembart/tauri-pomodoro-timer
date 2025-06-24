@@ -65,7 +65,7 @@ impl Timer {
                         let _ = app.emit("timer-state-change", *is_paused);
                         println!("Timer finished!");
 
-                        app.notification()
+                        let _ = app.notification()
                             .builder()
                             .title("Session finished!")
                             .body("You finished your next session, keep it up!")

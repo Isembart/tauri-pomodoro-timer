@@ -81,7 +81,7 @@ export default function App() {
     },[]);
 
     return (
-        <div className={`app-container ${mode}`}>
+        <div data-tauri-drag-region className={`app-container ${mode}`}>
       <div className="row">
         <button onClick={() => handleSetup(1500, "focus")}>Focus</button>
         <button onClick={() => handleSetup(300, "short")}>Break</button>

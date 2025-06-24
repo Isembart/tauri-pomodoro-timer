@@ -15,7 +15,8 @@
       {
         "title": "Pomodo",
         "width": 800,
-        "height": 300
+        "height": 300,
+        "decorations": false
       }
     ],
     "security": {
