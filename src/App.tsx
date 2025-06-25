@@ -85,7 +85,7 @@ export default function App() {
         <Timer timerValue={timerValue} />
         <div className="row">
           <button onClick={() => handleSetup(1500, "focus")}>Focus</button>
-          <button onClick={() => handleSetup(5, "short")}>Break</button>
+          <button onClick={() => handleSetup(300, "short")}>Break</button>
           <button onClick={() => handleSetup(900, "long")}>Long Break</button>
         </div>
 
